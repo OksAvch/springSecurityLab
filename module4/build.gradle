@@ -1,0 +1,111 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.1'
+	id 'io.spring.dependency-management' version '1.1.4'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'com.adarshr.test-logger' version "${testLoggerVer}"
+}
+
+group = 'org.javamp'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.slf4j:slf4j-api:${slf4jVer}"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    compileOnly "org.projectlombok:lombok:${lombokVer}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVer}"
+
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVer}"
+    testImplementation "org.mockito:mockito-core:${mockitoVer}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVer}"
+}
+
+
+
+check.dependsOn jacocoTestCoverageVerification
+jacocoTestReport.dependsOn test
+
+checkstyle {
+    checkstyleTest.enabled = false
+    ignoreFailures = false
+}
+
+test {
+    useJUnitPlatform()
+    testLogging.showStandardStreams = true
+}
+
+jar {
+    enabled = false
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.80
+            }
+        }
+    }
+}
+
+testlogger {
+    // pick a theme - mocha, standard, plain, mocha-parallel, standard-parallel or plain-parallel
+    theme 'standard'
+
+    // set to false to disable detailed failure logs
+    showExceptions true
+
+    // set to false to hide stack traces
+    showStackTraces true
+
+    // set to true to remove any filtering applied to stack traces
+    showFullStackTraces false
+
+    // set to false to hide exception causes
+    showCauses true
+
+    // set threshold in milliseconds to highlight slow tests
+    slowThreshold 2000
+
+    // displays a breakdown of passes, failures and skips along with total duration
+    showSummary true
+
+    // set to true to see simple class names
+    showSimpleNames false
+
+    // set to false to hide passed tests
+    showPassed true
+
+    // set to false to hide skipped tests
+    showSkipped true
+
+    // set to false to hide failed tests
+    showFailed true
+
+    // enable to see standard out and error streams inline with the test results
+    showStandardStreams false
+
+    // set to false to hide passed standard out and error streams
+    showPassedStandardStreams true
+
+    // set to false to hide skipped standard out and error streams
+    showSkippedStandardStreams true
+
+    // set to false to hide failed standard out and error streams
+    showFailedStandardStreams true
+}
