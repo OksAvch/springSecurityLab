@@ -19,19 +19,25 @@ repositories {
 }
 
 dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "org.slf4j:slf4j-api:${slf4jVer}"
+    implementation 'org.postgresql:postgresql'
+    implementation "org.liquibase:liquibase-core:${liquibaseVer}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
     compileOnly "org.projectlombok:lombok:${lombokVer}"
     annotationProcessor "org.projectlombok:lombok:${lombokVer}"
 
+    testCompileOnly "org.projectlombok:lombok:${lombokVer}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVer}"
+
     testImplementation "org.junit.jupiter:junit-jupiter:${junitVer}"
     testImplementation "org.mockito:mockito-core:${mockitoVer}"
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVer}"
+    testImplementation "com.h2database:h2:${h2DbVer}"
 }
 
 

@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/log/V01-20240106-initial_schema.yaml
+  - include:
+      file: db/changelog/log/V01-20240106-user-roles.yaml
