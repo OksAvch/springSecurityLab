@@ -10,6 +10,7 @@ import org.javamp.module4.service.PasswordService;
 import org.javamp.module4.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +34,11 @@ public class UserServiceImpl implements UserService {
             throw new IncorrectUserOrPassword("Password is incorrect");
         }
 
+    }
+
+    @Override
+    public List<String> getBlockedUsers() {
+        return userRepository.findBlockedUsernames();
     }
 
     private void updatePassword(ChangePasswordDto changePasswordDto, UserData userData) {

@@ -4,6 +4,10 @@ import org.javamp.module4.data.ChangePasswordDto;
 import org.javamp.module4.exception.IncorrectUserOrPassword;
 import org.javamp.module4.exception.UserNotFoundException;
 
+import java.util.List;
+
 public interface UserService {
     void changePassword(ChangePasswordDto changePasswordDto) throws IncorrectUserOrPassword, UserNotFoundException;
+
+    List<String> getBlockedUsers();
 }
