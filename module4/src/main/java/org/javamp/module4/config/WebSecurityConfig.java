@@ -15,28 +15,42 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+//                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/", "/login", "/error", "/contactInfo")
+                        .permitAll())
+
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/home")
+                        .hasRole(Role.USER.name()))
+
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/admin")
                         .hasRole(Role.VIEW_ADMIN.name()))
 
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/info")
                         .hasAnyRole(Role.VIEW_INFO.name(), Role.VIEW_ADMIN.name()))
 
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/home")
-                        .hasRole(Role.USER.name()))
-
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/contactInfo")
-                        .permitAll()) // it is for /contactInfo
-
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .httpBasic(withDefaults())
+
+                .formLogin(
+                        form -> form
+                                .loginPage("/login")
+                                .defaultSuccessUrl("/home")
+                                .failureUrl("/login?error")
+//                                .loginProcessingUrl("/login")
+                                .permitAll()
+                )
+                .logout(
+                        logout -> logout
+                                .clearAuthentication(true)
+                                .invalidateHttpSession(true)
+                                .logoutSuccessUrl("/login?logout")
+//                                .permitAll()  // why is it here?
+                )
                 .passwordManagement(Customizer.withDefaults());
 
         return http.build();
