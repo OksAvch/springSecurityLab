@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,17 +23,23 @@ public class WebSecurityConfig {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/home").permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/admin")
+                        .hasRole(Role.VIEW_ADMIN.name()))
+
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/info")
+                        .hasAnyRole(Role.VIEW_INFO.name(), Role.VIEW_ADMIN.name()))
+
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/home")
+                        .hasRole(Role.USER.name()))
+
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/contactInfo")
+                        .permitAll()) // it is for /contactInfo
+
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .httpBasic(withDefaults())
                 .passwordManagement(Customizer.withDefaults());
 
         return http.build();
-    }
-
-    @Bean
-    protected WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers("/contactInfo");
     }
 
     @Bean
@@ -43,5 +50,12 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder createPasswordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public GrantedAuthoritiesMapper authoritiesMapper() {
+        SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
+        authorityMapper.setConvertToUpperCase(true);
+        return authorityMapper;
     }
 }

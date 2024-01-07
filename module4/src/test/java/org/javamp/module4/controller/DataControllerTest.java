@@ -43,4 +43,14 @@ class DataControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("It is a Home page"));
     }
+
+    @Test
+    @WithMockUser(username = "user")
+    void shouldReturnAdministrationData() throws Exception {
+        ResultActions resultActions = mockMvc.perform(get("/admin"));
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(content().string("It is an Administration page"));
+    }
 }
