@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<UserData, String> {
 
     @Query("SELECT u.userName FROM UserData u WHERE u.enabled = false")
     List<String> findBlockedUsernames();
+
+    List<UserData> findByEnabled(boolean is);
 }

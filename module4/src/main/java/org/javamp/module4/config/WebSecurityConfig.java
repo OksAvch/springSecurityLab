@@ -1,5 +1,6 @@
 package org.javamp.module4.config;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -12,16 +13,20 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class WebSecurityConfig {
+
+    private final AuthenticationFailureHandler eventAuthenticationFailureHandler;
+
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-//                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/", "/login", "/error", "/contactInfo")
                         .permitAll())
 
@@ -39,9 +44,9 @@ public class WebSecurityConfig {
                 .formLogin(
                         form -> form
                                 .loginPage("/login")
+                                .failureHandler(eventAuthenticationFailureHandler)
                                 .defaultSuccessUrl("/home")
-                                .failureUrl("/login?error")
-//                                .loginProcessingUrl("/login")
+//                                .failureUrl("/login?error")  // prevents LoginAuthenticationFailureHandler from being called
                                 .permitAll()
                 )
                 .logout(
@@ -49,7 +54,7 @@ public class WebSecurityConfig {
                                 .clearAuthentication(true)
                                 .invalidateHttpSession(true)
                                 .logoutSuccessUrl("/login?logout")
-//                                .permitAll()  // why is it here?
+//                                .permitAll()  // why manual may suggest it to be here?
                 )
                 .passwordManagement(Customizer.withDefaults());
 
@@ -67,7 +72,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public GrantedAuthoritiesMapper authoritiesMapper() {
+    public GrantedAuthoritiesMapper createAuthoritiesMapper() {
         SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
         authorityMapper.setConvertToUpperCase(true);
         return authorityMapper;

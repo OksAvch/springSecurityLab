@@ -1,8 +1,9 @@
 package org.javamp.module4.service.impl;
 
 import lombok.SneakyThrows;
-import org.javamp.module4.data.ChangePasswordDto;
+import org.javamp.module4.data.AuthoritiesData;
 import org.javamp.module4.data.UserData;
+import org.javamp.module4.dto.ChangePasswordDto;
 import org.javamp.module4.exception.IncorrectUserOrPassword;
 import org.javamp.module4.exception.UserNotFoundException;
 import org.javamp.module4.repository.UserRepository;
@@ -26,13 +27,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
-    public static final String USER = "user";
-    public static final String NEW_PASSWORD = "new";
-    public static final String ENCODED_NEW = "encodedNew";
-    public static final String OLD_PASSWORD = "old";
-    public static final String WRONG_PASSWORD = "wrong";
-    public static final String ENCODED_OLD = "encoded";
-    public static final String BLOCKED_USER = "Blocked_user";
+    private static final String USER = "user";
+    private static final String NEW_PASSWORD = "new";
+    private static final String ENCODED_NEW = "encodedNew";
+    private static final String OLD_PASSWORD = "old";
+    private static final String WRONG_PASSWORD = "wrong";
+    private static final String ENCODED_OLD = "encoded";
+    private static final String BLOCKED_USER = "Blocked_user";
     @Mock
     PasswordService passwordServiceMock;
 
@@ -45,7 +46,7 @@ class UserServiceImplTest {
     @Test
     @SneakyThrows
     void shouldChangePassword() {
-        UserData userData = new UserData(USER, ENCODED_OLD, true);
+        UserData userData = createUser(ENCODED_OLD);
         ChangePasswordDto changePasswordDto = new ChangePasswordDto(USER, OLD_PASSWORD, NEW_PASSWORD);
 
         when(repositoryMock.findById(USER)).thenReturn(Optional.of(userData));
@@ -54,20 +55,22 @@ class UserServiceImplTest {
 
         sut.changePassword(changePasswordDto);
 
-        verify(repositoryMock, times(1)).save(new UserData(USER, ENCODED_NEW, true));
+        verify(repositoryMock, times(1))
+                .save(createUser(ENCODED_NEW));
     }
 
     @Test
     @SneakyThrows
     void shouldFailOnIncorrectOldPassword() {
-        UserData userData = new UserData(USER, ENCODED_OLD, true);
+        UserData userData = createUser(ENCODED_OLD);
         ChangePasswordDto changePasswordDto = new ChangePasswordDto(USER, WRONG_PASSWORD, NEW_PASSWORD);
 
         when(repositoryMock.findById(USER)).thenReturn(Optional.of(userData));
         when(passwordServiceMock.validate(WRONG_PASSWORD, ENCODED_OLD)).thenReturn(false);
 
         assertThrows(IncorrectUserOrPassword.class, () -> sut.changePassword(changePasswordDto));
-        verify(repositoryMock, times(0)).save(new UserData(USER, ENCODED_NEW, true));
+        verify(repositoryMock, times(0))
+                .save(createUser(ENCODED_NEW));
     }
 
     @Test
@@ -78,7 +81,8 @@ class UserServiceImplTest {
         when(repositoryMock.findById(USER)).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class, () -> sut.changePassword(changePasswordDto));
-        verify(repositoryMock, times(0)).save(new UserData(USER, ENCODED_NEW, true));
+        verify(repositoryMock, times(0))
+                .save(createUser(ENCODED_NEW));
     }
 
     @Test
@@ -90,5 +94,15 @@ class UserServiceImplTest {
 
         assertIterableEquals(Collections.singletonList(BLOCKED_USER), result);
         verify(repositoryMock, times(1)).findBlockedUsernames();
+    }
+
+    private UserData createUser(String password) {
+        return new UserData(
+                USER,
+                password,
+                true,
+                0,
+                null,
+                Collections.singletonList(new AuthoritiesData()));
     }
 }

@@ -10,3 +10,7 @@ spring:
     hibernate.ddl-auto: none
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+app:
+  security:
+    failedlogin:
+      count: 2

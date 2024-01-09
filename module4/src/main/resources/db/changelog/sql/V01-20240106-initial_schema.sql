@@ -5,6 +5,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE authorities (
+    id integer primary key,
     username VARCHAR(50) not null,
     authority VARCHAR(50) not null,
     constraint fk_authorities_users foreign key (username) references users (username)

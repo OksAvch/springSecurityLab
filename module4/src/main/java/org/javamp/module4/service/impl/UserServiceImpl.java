@@ -1,8 +1,8 @@
 package org.javamp.module4.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.javamp.module4.data.ChangePasswordDto;
 import org.javamp.module4.data.UserData;
+import org.javamp.module4.dto.ChangePasswordDto;
 import org.javamp.module4.exception.IncorrectUserOrPassword;
 import org.javamp.module4.exception.UserNotFoundException;
 import org.javamp.module4.repository.UserRepository;

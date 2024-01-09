@@ -1,7 +1,7 @@
 package org.javamp.module4.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.javamp.module4.data.ChangePasswordDto;
+import org.javamp.module4.dto.ChangePasswordDto;
 import org.javamp.module4.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ class UsersControllerTest {
 
         String userJson = objectMapper.writeValueAsString(dto);
 
-        ResultActions resultActions = mockMvc.perform(patch("users/changePassword")
+        ResultActions resultActions = mockMvc.perform(patch("/users/changePassword")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .content(userJson));

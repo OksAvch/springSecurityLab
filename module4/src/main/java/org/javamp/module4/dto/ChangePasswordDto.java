@@ -1,4 +1,4 @@
-package org.javamp.module4.data;
+package org.javamp.module4.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

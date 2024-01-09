@@ -16,8 +16,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PasswordServiceImplTest {
 
-    public static final String PASSWORD = "password";
-    public static final String ENCODED_PASSWORD = "encoded";
+    private static final String PASSWORD = "password";
+    private static final String ENCODED_PASSWORD = "encoded";
+
     @Mock
     PasswordEncoder passwordEncoderMock;
 
