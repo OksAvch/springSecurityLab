@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+#  secretApp:
+#    build:
+#      context: .
+#      dockerfile: .
+#    ports:
+#      - "8090:8090"
+#    depends_on:
+#      - postgres
+#    networks:
+#      - secretApp
+
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_DB=secretDb
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    networks:
+      - secretApp
+    ports:
+      - 15433:5432
+
+
+networks:
+  secretApp:
+    ipam:
+      driver: default

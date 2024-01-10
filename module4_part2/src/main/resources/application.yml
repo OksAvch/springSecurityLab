@@ -1,0 +1,23 @@
+server:
+  port: 8090
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:15433/secretDb
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate.ddl-auto: none
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+
+app:
+  link:
+    scheme: http
+    host: localhost
+    port: 8090
