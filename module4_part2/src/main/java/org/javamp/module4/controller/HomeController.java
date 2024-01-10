@@ -21,7 +21,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String getHome() {
-        return "sharesecret";
+        return "login";
     }
 
     @GetMapping("/login")

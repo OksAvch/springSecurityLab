@@ -1,15 +1,19 @@
 version: "3.9"
 services:
-#  secretApp:
-#    build:
-#      context: .
-#      dockerfile: .
-#    ports:
-#      - "8090:8090"
-#    depends_on:
-#      - postgres
-#    networks:
-#      - secretApp
+  secretapp:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8091:8091"
+    depends_on:
+      - postgres
+    environment:
+      - DB_PORT=5432
+      - DB_HOST=postgres
+      - APP_PORT=8091
+    networks:
+      - secretApp
 
   postgres:
     image: postgres:14-alpine

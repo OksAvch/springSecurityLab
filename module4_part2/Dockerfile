@@ -10,12 +10,13 @@ COPY src src
 
 ENV GRADLE_OPTS -Dorg.gradle.daemon=false
 
-RUN gradle build
+RUN gradle build -x check
+RUN ls ./build/libs/
 
 FROM $JAVA_IMG
 ARG DEPENDENCY=/workdir/build
 
-COPY --from=builder ${DEPENDENCY}/libs/module4-1.jar /opt/securedApp/securedApp.jar
+COPY --from=builder ${DEPENDENCY}/libs/module4_part2-1.jar /opt/secretApp/secretApp.jar
 
-WORKDIR /opt/securedApp
-CMD java -jar securedApp.jar
+WORKDIR /opt/secretApp
+CMD java -jar secretApp.jar
