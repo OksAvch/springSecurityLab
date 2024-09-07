@@ -10,7 +10,7 @@ COPY src src
 
 ENV GRADLE_OPTS -Dorg.gradle.daemon=false
 
-RUN gradle build
+RUN gradle build -x check
 
 FROM $JAVA_IMG
 ARG DEPENDENCY=/workdir/build

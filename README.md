@@ -21,6 +21,8 @@ This project was implemented to practice security configuration for a Spring Boo
     - Custom Login/Logout pages.
     - Brute force protection with user blocking for 5 minutes after 3 failed login attempts.
 
+More info in: [HELP.md](userAccessManagement/HELP.md)
+
 ## Project 2: Secret Provider
 
 This application allows authenticated users to send and retrieve secrets through one-time access links.
@@ -28,5 +30,6 @@ This application allows authenticated users to send and retrieve secrets through
 ### Features:
 1. **Secret Sharing**:
     - A form for users to submit secrets, generating a unique link for one-time access.
-    - After the secret is viewed, it is deleted from the system.
+    - After the secret is viewed, it is deleted from the system.   
 
+More into in: [HELP.md](secretProvider/HELP.md)

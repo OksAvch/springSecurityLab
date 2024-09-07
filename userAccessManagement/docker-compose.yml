@@ -1,14 +1,18 @@
 services:
-  securedApp:
+  securedapp:
     build:
       context: .
-      dockerfile: .
+      dockerfile: ./Dockerfile
     ports:
       - "8090:8090"
     depends_on:
       - postgres
     networks:
       - securedApp
+    environment:
+      - DB_PORT=5432
+      - DB_HOST=postgres
+      - APP_PORT=8090
 
   postgres:
     image: postgres:14-alpine
